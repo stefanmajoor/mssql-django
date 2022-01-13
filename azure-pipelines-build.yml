@@ -1,0 +1,33 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- dev
+
+pool:
+  name: Django-1ES-pool
+  demands:
+  - imageOverride -equals MMSUbuntu20.04
+
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: "3.9"
+    displayName: Use Python 3.9
+
+  - script: |
+      python -m pip install --upgrade build
+      python -m build
+    displayName: 'Build mssql-django'
+  - task: ManifestGeneratorTask@0
+    inputs:
+      BuildDropPath: './dist'
+      PackageName: 'mssql-django'
+      PackageVersion: '1.1.1'
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: './dist'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
