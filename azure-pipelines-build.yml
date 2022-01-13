@@ -4,7 +4,7 @@
 # https://aka.ms/yaml
 
 trigger:
-- dev
+- azure-pipelines-build
 
 pool:
   name: Django-1ES-pool
